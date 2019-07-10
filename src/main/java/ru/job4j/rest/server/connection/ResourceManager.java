@@ -13,7 +13,7 @@ public class ResourceManager {
         return instance;
     }
 
-    public String getValues(String key) {
+    public String getValue(String key) {
         return rb.getString(key);
     }
 

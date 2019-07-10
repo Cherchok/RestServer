@@ -58,8 +58,8 @@ public class XMLresponse {
         String password = getPassword();
 
         // параметры веб сервиса
-        String urnName = "urn";
-        String urn = "ZTABLEREAD";
+        String urn = "urn";
+        String urnName = "ZTABLEREAD";
         String uri = "urn:sap-com:document:sap:rfc:functions";
         String destination = "http://support.alpeconsulting.com:8201/sap/bc/srt/rfc/sap/ztablereadws/100/" +
                 "ztablereadws/ztablereadws";
@@ -83,13 +83,13 @@ public class XMLresponse {
             SOAPPart soapPart = message.getSOAPPart();
             SOAPEnvelope envelope = soapPart.getEnvelope();
 
-            envelope.addNamespaceDeclaration(urnName, uri);
+            envelope.addNamespaceDeclaration(urn, uri);
 
             // Create and populate the body
             SOAPBody body = envelope.getBody();
 
             // enter params for connection
-            SOAPElement bodyElement = body.addChildElement(envelope.createName("urn:" + urn));
+            SOAPElement bodyElement = body.addChildElement(envelope.createName("urn:" + urnName));
 
             // Add parameters
             bodyElement.addChildElement("FIELDNAMES").addTextNode(fieldNames);
