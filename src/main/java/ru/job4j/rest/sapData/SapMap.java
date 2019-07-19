@@ -30,7 +30,8 @@ public class SapMap {
     private String fieldNames;
 
     // constructor by default
-    public SapMap() { }
+    public SapMap() {
+    }
 
     //  constructor with params
     public SapMap(String table, String fieldsQuan, String language, String where,
@@ -52,11 +53,12 @@ public class SapMap {
         return db.parse(is);
     }
 
-//  retrieving data from SAP
-    public void dataFill(String login, String password) {
+    //  retrieving data from SAP
+    public void dataFill(String systemAddress, String login, String password) {
         XMLresponse xmLresponse = new XMLresponse(table, fieldsQuan, language, where, order, group, fieldNames);
         xmLresponse.setLogin(login);
         xmLresponse.setPassword(password);
+        xmLresponse.setSystemAddress(systemAddress);
         String XMLresponse = xmLresponse.responseToString();
         Document xmlDoc = null;
         try {
@@ -64,7 +66,7 @@ public class SapMap {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        NodeList nodeList= xmlDoc.getElementsByTagName("*");
+        NodeList nodeList = xmlDoc.getElementsByTagName("*");
         StringBuilder zdata;
         String zdataTemp;
         String value;

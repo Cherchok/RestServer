@@ -10,13 +10,15 @@ public class Session {
     private LinkedHashMap<String, DataSet[]> dataList = new LinkedHashMap<>();
     private String login;
     private String password;
+    private String systemAddress;
 
     public Session() {
     }
 
-    public Session(String login, String password){
+    public Session(String systemAddress, String login, String password) {
         this.login = login;
         this.password = password;
+        this.systemAddress = systemAddress;
     }
 
     public LinkedHashMap<String, DataSet[]> getDataList() {
@@ -46,7 +48,7 @@ public class Session {
 
         if (!dataList.containsKey(table + fieldsQuan + language + where + order + group + fieldNames)) {
             SapMap sm = new SapMap(table, fieldsQuan, language, where, order, group, fieldNames);
-            sm.dataFill(login,password);
+            sm.dataFill(systemAddress, login, password);
             lm = sm.getDataMap();
             columnLeng = sm.getColumnLeng();
             fieldName = sm.getFieldName();

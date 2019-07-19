@@ -20,11 +20,11 @@ public class Server {
         this.sessionList = sessionList;
     }
 
-    public Session getSession(String clientUrl, String login, String password, int id) {
-        return sessionList.get(clientUrl + login + password + id);
+    public Session getSession(String systemAddress, String login, String password, int id) {
+        return sessionList.get(systemAddress + login + password + id);
     }
 
-    public void setSession(String clientUrl, String login, String password, int id, Session session) {
-        sessionList.put(clientUrl + login + password + id, session);
+    public void setSession(String systemAddress, String login, String password, int id, Session session) {
+        sessionList.put(systemAddress + login + password + id, session);
     }
 }

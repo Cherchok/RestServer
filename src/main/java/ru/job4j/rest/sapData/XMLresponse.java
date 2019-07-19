@@ -8,6 +8,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 public class XMLresponse {
+    private String systemAddress;
     private String login;
     private String password;
 
@@ -36,6 +37,14 @@ public class XMLresponse {
 
     }
 
+    public String getSystemAddress() {
+        return systemAddress;
+    }
+
+    public void setSystemAddress(String systemAddress) {
+        this.systemAddress = systemAddress;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -54,15 +63,16 @@ public class XMLresponse {
 
     public String responseToString() {
         // параметры авторизации
+        String systemAddress = getSystemAddress();
         String username = getLogin();
         String password = getPassword();
+
 
         // параметры веб сервиса
         String urn = "urn";
         String urnName = "ZTABLEREAD";
         String uri = "urn:sap-com:document:sap:rfc:functions";
-        String destination = "http://support.alpeconsulting.com:8201/sap/bc/srt/rfc/sap/ztablereadws/100/" +
-                "ztablereadws/ztablereadws";
+        String destination = systemAddress + "ztablereadws/100/ztablereadws/ztablereadws";
 
         // create XML request , get connection, get XML response as a string/
         try {
