@@ -18,6 +18,10 @@ public class Controller {
     private final static Map<Integer, DataSet> RESP = new ConcurrentHashMap<>();
     private static Server server;
 
+    static {
+        server = new Server();
+    }
+
     // метод, который при запуске клиентского приложения, определяет доступные системы и их адреса
     @GET
     @Path("/connection")
@@ -33,14 +37,17 @@ public class Controller {
     @Produces("applications/json")
     public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
                          @PathParam("password") String password) {
-        server = new Server();
         Session session;
+        int id = 0;
         if (!server.getSessionList().containsKey(systemAddress + login + password)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password);
+            id = server.idSetter();
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password);
+        }
         session.setDataSet(" ", " ", " ", " ", " ", " ", " ");
-        server.setSession(systemAddress, login, password, 0, session);
-        return server.getSessionList().get(systemAddress + login + password + 0).getDataSet(" ", " ",
+        server.setSession(systemAddress, login, password, id, session);
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(" ", " ",
                 " ", " ", " ", " ", " ");
     }
 
@@ -54,10 +61,14 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, "100", "R", "", "", "", "");
+
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, "5",
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, "5",
                 "R", "", "", "", "");
     }
 
@@ -70,10 +81,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, "R", "", "", "", "");
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 "R", "", "", "", "");
     }
 
@@ -87,10 +101,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, language, "", "", "", "");
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 language, "", "", "", "");
     }
 
@@ -104,10 +121,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, language, where, "", "", "");
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 language, where, "", "", "");
     }
 
@@ -122,10 +142,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, language, where, order, "", "");
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 language, where, order, "", "");
     }
 
@@ -140,10 +163,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, language, where, order, group, "");
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 language, where, order, group, "");
     }
 
@@ -159,10 +185,13 @@ public class Controller {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             session = new Session(systemAddress, login, password);
-        } else session = server.getSessionList().get(systemAddress + login + password + id);
+            id = String.valueOf(server.idSetter());
+        } else {
+            session = server.getSessionList().get(systemAddress + login + password + id);
+        }
         session.setDataSet(table, fieldsQuan, language, where, order, group, fieldNames);
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + id).getDataSet(table, fieldsQuan,
+        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
                 language, where, order, group, fieldNames);
     }
 

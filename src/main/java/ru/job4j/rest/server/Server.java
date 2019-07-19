@@ -25,6 +25,22 @@ public class Server {
     }
 
     public void setSession(String systemAddress, String login, String password, int id, Session session) {
-        sessionList.put(systemAddress + login + password + id, session);
+        sessionList.put(systemAddress + login + password + "~" + id, session);
+    }
+
+    public int idSetter() {
+        int id = 0;
+        for (String key : sessionList.keySet()) {
+            for (int i = 0; i < key.length(); i++) {
+                int idTemp = 0;
+                if (key.charAt(i) == '~') {
+                    idTemp = Integer.parseInt(key.substring(i+1));
+                }
+                if (id <= idTemp) {
+                    id = idTemp + 1;
+                }
+            }
+        }
+        return id;
     }
 }
