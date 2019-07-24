@@ -28,8 +28,7 @@ public class Server {
         sessionList.put(systemAddress + login + password + "~" + id, session);
     }
 
-    public int idSetter() {
-        int id = 0;
+    public int idSetter(int id) {
         for (String key : sessionList.keySet()) {
             for (int i = 0; i < key.length(); i++) {
                 int idTemp = 0;

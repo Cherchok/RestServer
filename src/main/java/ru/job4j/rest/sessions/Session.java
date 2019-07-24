@@ -50,6 +50,16 @@ public class Session {
             SapMap sm = new SapMap(table, fieldsQuan, language, where, order, group, fieldNames);
             sm.dataFill(systemAddress, login, password);
             lm = sm.getDataMap();
+            for (String name : lm.keySet()) {
+                if (name.equals("code")) {
+                    if (lm.get(name).get(0).equals("QR")) {
+                        DataSet[] maps = new DataSet[lm.keySet().size()];
+                        maps[0] = new DataSet(name, lm.get(name));
+                        dataList.put(table + fieldsQuan + language + where + order + group + fieldNames, maps);
+                        return;
+                    }
+                }
+            }
             columnLeng = sm.getColumnLeng();
             fieldName = sm.getFieldName();
             dataType = sm.getDataType();

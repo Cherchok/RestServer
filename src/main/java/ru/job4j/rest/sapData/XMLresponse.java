@@ -33,8 +33,6 @@ public class XMLresponse {
         this.order = order;
         this.group = group;
         this.fieldNames = fieldNames;
-        this.response = responseToString();
-
     }
 
     public String getSystemAddress() {
@@ -61,11 +59,7 @@ public class XMLresponse {
         this.password = password;
     }
 
-    public String responseToString() {
-        // параметры авторизации
-        String systemAddress = getSystemAddress();
-        String username = getLogin();
-        String password = getPassword();
+    public String responseToString(String systemAddress, String username, String password) {
 
 
         // параметры веб сервиса
@@ -114,7 +108,7 @@ public class XMLresponse {
             // Save the message
             message.saveChanges();
 
-            //  message.writeTo(System.out);
+//            message.writeTo(System.out);
 
             // Send the message and get the reply
             SOAPMessage reply = connection.call(message, destination);

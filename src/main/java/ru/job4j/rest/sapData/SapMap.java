@@ -59,7 +59,7 @@ public class SapMap {
         xmLresponse.setLogin(login);
         xmLresponse.setPassword(password);
         xmLresponse.setSystemAddress(systemAddress);
-        String XMLresponse = xmLresponse.responseToString();
+        String XMLresponse = xmLresponse.responseToString(systemAddress, login, password);
         Document xmlDoc = null;
         try {
             xmlDoc = loadXMLString(XMLresponse);
@@ -129,6 +129,13 @@ public class SapMap {
                     switch (element.getTagName()) {
                         case "FIELDNAME":
                             fieldName.addLast(value);
+                            if (value.equals("QR")) {
+                                dataMap = new LinkedHashMap<>();
+                                LinkedList<String> strList = new LinkedList<>();
+                                strList.add(0, value);
+                                dataMap.put("code", strList);
+                                return;
+                            }
                             break;
                         case "DATATYPE":
                             dataType.add(value);
