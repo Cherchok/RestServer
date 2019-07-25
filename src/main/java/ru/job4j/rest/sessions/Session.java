@@ -11,14 +11,16 @@ public class Session {
     private String login;
     private String password;
     private String systemAddress;
+    private int id;
 
     public Session() {
     }
 
-    public Session(String systemAddress, String login, String password) {
+    public Session(String systemAddress, String login, String password, int id) {
         this.login = login;
         this.password = password;
         this.systemAddress = systemAddress;
+        this.id = id;
     }
 
     public LinkedHashMap<String, DataSet[]> getDataList() {
@@ -32,7 +34,7 @@ public class Session {
     public DataSet[] getDataSet(String table, String fieldsQuan, String language, String where, String order,
                                 String group, String fieldNames) {
 
-        return dataList.get(table + fieldsQuan + language + where + order + group + fieldNames);
+        return dataList.get(table + fieldsQuan + language + where + order + group + fieldNames +"~"+ id);
     }
 
     public void setDataSet(String table, String fieldsQuan, String language, String where, String order,
@@ -45,8 +47,9 @@ public class Session {
         LinkedList<String> domName;
         LinkedList<String> outputLen;
         LinkedList<String> decimals;
+        LinkedList<String> clientNumber = new LinkedList<>();
 
-        if (!dataList.containsKey(table + fieldsQuan + language + where + order + group + fieldNames)) {
+        if (!dataList.containsKey(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id)) {
             SapMap sm = new SapMap(table, fieldsQuan, language, where, order, group, fieldNames);
             sm.dataFill(systemAddress, login, password);
             lm = sm.getDataMap();
@@ -55,8 +58,8 @@ public class Session {
                     if (lm.get(name).get(0).equals("QR")) {
                         DataSet[] maps = new DataSet[lm.keySet().size()];
                         maps[0] = new DataSet(name, lm.get(name));
-                        dataList.put(table + fieldsQuan + language + where + order + group + fieldNames, maps);
-                        dataList.get(table + fieldsQuan + language + where + order + group + fieldNames);
+                        dataList.put(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id, maps);
+                        dataList.get(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id);
                         return;
                     }
                 }
@@ -68,26 +71,29 @@ public class Session {
             domName = sm.getDomName();
             outputLen = sm.getOutputLen();
             decimals = sm.getDecimals();
-            DataSet[] maps = new DataSet[lm.keySet().size() + 7];
-            int id = 0;
+            clientNumber.add(String.valueOf(id));
+            DataSet[] maps = new DataSet[lm.keySet().size() + 8];
+            int i = 0;
             for (String name : lm.keySet()) {
-                maps[id] = new DataSet(name, lm.get(name));
-                id++;
+                maps[i] = new DataSet(name, lm.get(name));
+                i++;
             }
-            maps[id] = new DataSet("columnLeng", columnLeng);
-            id++;
-            maps[id] = new DataSet("fieldName", fieldName);
-            id++;
-            maps[id] = new DataSet("dataType", dataType);
-            id++;
-            maps[id] = new DataSet("repText", repText);
-            id++;
-            maps[id] = new DataSet("domName", domName);
-            id++;
-            maps[id] = new DataSet("outputLen", outputLen);
-            id++;
-            maps[id] = new DataSet("decimals", decimals);
-            dataList.put(table + fieldsQuan + language + where + order + group + fieldNames, maps);
+            maps[i] = new DataSet("columnLeng", columnLeng);
+            i++;
+            maps[i] = new DataSet("fieldName", fieldName);
+            i++;
+            maps[i] = new DataSet("dataType", dataType);
+            i++;
+            maps[i] = new DataSet("repText", repText);
+            i++;
+            maps[i] = new DataSet("domName", domName);
+            i++;
+            maps[i] = new DataSet("outputLen", outputLen);
+            i++;
+            maps[i] = new DataSet("decimals", decimals);
+            i++;
+            maps[i] = new DataSet("clientNumber", clientNumber);
+            dataList.put(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id, maps);
         }
     }
 }

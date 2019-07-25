@@ -3,7 +3,7 @@ package ru.job4j.rest.controller;
 
 import ru.job4j.rest.sapData.DataSet;
 import ru.job4j.rest.server.Server;
-import ru.job4j.rest.server.connection.ModulesCollector;
+import ru.job4j.rest.server.connection.SystemsCollector;
 import ru.job4j.rest.sessions.Session;
 
 import javax.ws.rs.*;
@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("all")
 @Path("/wmap")
 public class Controller {
     private final static AtomicInteger ID = new AtomicInteger(0);
@@ -28,8 +29,8 @@ public class Controller {
     @Path("/connection")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get() {
-        ModulesCollector modulesCollector = new ModulesCollector();
-        return modulesCollector.getModules();
+        SystemsCollector systemsCollector = new SystemsCollector();
+        return systemsCollector.getModules();
     }
 
     // метод для запуска сервера и авторизации
@@ -41,8 +42,8 @@ public class Controller {
         Session session;
         int id = 0;
         if (!server.getSessionList().containsKey(systemAddress + login + password)) {
-            session = new Session(systemAddress, login, password);
             id = server.idSetter(id);
+            session = new Session(systemAddress, login, password, id);
         } else {
             session = server.getSessionList().get(systemAddress + login + password);
         }
@@ -61,8 +62,9 @@ public class Controller {
                          @PathParam("table") String table) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -81,8 +83,9 @@ public class Controller {
                          @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -101,8 +104,9 @@ public class Controller {
                          @PathParam("language") String language) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -121,8 +125,9 @@ public class Controller {
                          @PathParam("language") String language, @PathParam("where") String where) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -142,8 +147,9 @@ public class Controller {
                          @PathParam("order") String order) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -163,8 +169,9 @@ public class Controller {
                          @PathParam("order") String order, @PathParam("group") String group) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
@@ -187,8 +194,9 @@ public class Controller {
                          @PathParam("fieldNames") String fieldNames) {
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            session = new Session(systemAddress, login, password);
-            id = String.valueOf(server.idSetter(Integer.parseInt(id)));
+            int ids = server.idSetter(Integer.parseInt(id));
+            session = new Session(systemAddress, login, password, ids);
+            id = String.valueOf(ids);
         } else {
             session = server.getSessionList().get(systemAddress + login + password + id);
         }
