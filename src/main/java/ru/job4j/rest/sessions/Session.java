@@ -56,6 +56,7 @@ public class Session {
                         DataSet[] maps = new DataSet[lm.keySet().size()];
                         maps[0] = new DataSet(name, lm.get(name));
                         dataList.put(table + fieldsQuan + language + where + order + group + fieldNames, maps);
+                        dataList.get(table + fieldsQuan + language + where + order + group + fieldNames);
                         return;
                     }
                 }

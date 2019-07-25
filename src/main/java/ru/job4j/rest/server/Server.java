@@ -29,14 +29,22 @@ public class Server {
     }
 
     public int idSetter(int id) {
+        int freeNum = 0;
         for (String key : sessionList.keySet()) {
             for (int i = 0; i < key.length(); i++) {
                 int idTemp = 0;
                 if (key.charAt(i) == '~') {
-                    idTemp = Integer.parseInt(key.substring(i+1));
+                    idTemp = Integer.parseInt(key.substring(i + 1));
+                    if (freeNum != 0 || idTemp > i) {
+                        freeNum = i;
+                    }
                 }
                 if (id <= idTemp) {
-                    id = idTemp + 1;
+                    if (freeNum != 0) {
+                        id = freeNum;
+
+                    } else id = idTemp + 1;
+
                 }
             }
         }
