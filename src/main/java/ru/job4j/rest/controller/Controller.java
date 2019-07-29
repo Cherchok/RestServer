@@ -7,13 +7,12 @@ import ru.job4j.rest.server.connection.SystemsCollector;
 import ru.job4j.rest.sessions.Session;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("all")
+
 @Path("/wmap")
 public class Controller {
     private final static AtomicInteger ID = new AtomicInteger(0);
@@ -55,135 +54,6 @@ public class Controller {
 
     // методы к которым обращается клиент через get запросы с параметрами
     @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}")
-    @Produces("applications/json;charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, "100", "R", "", "", "", "");
-
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, "5",
-                "R", "", "", "", "");
-    }
-
-    @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}")
-    @Produces("applications/json;charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, fieldsQuan, "R", "", "", "", "");
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
-                "R", "", "", "", "");
-    }
-
-    @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}")
-    @Produces("applications/json;charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan,
-                         @PathParam("language") String language) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, fieldsQuan, language, "", "", "", "");
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
-                language, "", "", "", "");
-    }
-
-    @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}/{where}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan,
-                         @PathParam("language") String language, @PathParam("where") String where) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, fieldsQuan, language, where, "", "", "");
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
-                language, where, "", "", "");
-    }
-
-    @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}/{where}/{order}")
-    @Produces("applications/json;charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan,
-                         @PathParam("language") String language, @PathParam("where") String where,
-                         @PathParam("order") String order) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, fieldsQuan, language, where, order, "", "");
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
-                language, where, order, "", "");
-    }
-
-    @GET
-    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}/{where}/{order}/{group}")
-    @Produces("applications/json;charset=utf-8")
-    public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("id") String id,
-                         @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan,
-                         @PathParam("language") String language, @PathParam("where") String where,
-                         @PathParam("order") String order, @PathParam("group") String group) {
-        Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
-            session = new Session(systemAddress, login, password, ids);
-            id = String.valueOf(ids);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
-        }
-        session.setDataSet(table, fieldsQuan, language, where, order, group, "");
-        server.setSession(systemAddress, login, password, Integer.parseInt(id), session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(table, fieldsQuan,
-                language, where, order, group, "");
-    }
-
-
-
-    @GET
     @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}/{where}/{order}/{group}/{fieldNames}")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
@@ -192,6 +62,21 @@ public class Controller {
                          @PathParam("language") String language, @PathParam("where") String where,
                          @PathParam("order") String order, @PathParam("group") String group,
                          @PathParam("fieldNames") String fieldNames) {
+
+            String tempParam = table;
+            table = tempParam.replaceAll("~~~", "");
+            tempParam = fieldsQuan;
+            fieldsQuan = tempParam.replaceAll("~~~", "");
+            tempParam = where;
+            where = tempParam.replaceAll("~~~", "");
+            tempParam = order;
+            order = tempParam.replaceAll("~~~", "");
+            tempParam = group;
+            group = tempParam.replaceAll("~~~", "");
+            tempParam = fieldNames;
+            fieldNames = tempParam.replaceAll("~~~", "");
+
+
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
             int ids = server.idSetter(Integer.parseInt(id));
@@ -230,5 +115,12 @@ public class Controller {
     public Response delete(@PathParam("id") int id) {
         RESP.remove(id);
         return Response.status(200).build();
+    }
+
+    public String deleteSpaces(String param) {
+        if (param.equals(" ")) {
+            param = "";
+        }
+        return param;
     }
 }
