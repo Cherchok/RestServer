@@ -1,11 +1,12 @@
 package ru.job4j.rest.server;
 
+import ru.job4j.rest.life.LifeCycle;
 import ru.job4j.rest.sessions.Session;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Server {
+public class Server implements LifeCycle {
     private LinkedHashMap<String, Session> sessionList = new LinkedHashMap<>();
     private final static AtomicInteger ID = new AtomicInteger(0);
 
@@ -49,5 +50,13 @@ public class Server {
             }
         }
         return id;
+    }
+
+
+    @Override
+    public void kill(LinkedHashMap<String, ?> object, String name) {
+        object.remove(name);
+
+        System.gc();
     }
 }

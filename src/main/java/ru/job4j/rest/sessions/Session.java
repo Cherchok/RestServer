@@ -1,12 +1,13 @@
 package ru.job4j.rest.sessions;
 
+import ru.job4j.rest.life.LifeCycle;
 import ru.job4j.rest.sapData.DataSet;
 import ru.job4j.rest.sapData.SapMap;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-public class Session {
+public class Session implements LifeCycle {
     private LinkedHashMap<String, DataSet[]> dataList = new LinkedHashMap<>();
     private String login;
     private String password;
@@ -34,7 +35,7 @@ public class Session {
     public DataSet[] getDataSet(String table, String fieldsQuan, String language, String where, String order,
                                 String group, String fieldNames) {
 
-        return dataList.get(table + fieldsQuan + language + where + order + group + fieldNames +"~"+ id);
+        return dataList.get(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id);
     }
 
     public void setDataSet(String table, String fieldsQuan, String language, String where, String order,
@@ -95,5 +96,11 @@ public class Session {
             maps[i] = new DataSet("clientNumber", clientNumber);
             dataList.put(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id, maps);
         }
+    }
+
+    @Override
+    public void kill(LinkedHashMap<String, ?> object, String name) {
+        object.remove(name);
+        System.gc();
     }
 }

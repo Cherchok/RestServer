@@ -63,18 +63,18 @@ public class Controller {
                          @PathParam("order") String order, @PathParam("group") String group,
                          @PathParam("fieldNames") String fieldNames) {
 
-            String tempParam = table;
-            table = tempParam.replaceAll("~~~", "");
-            tempParam = fieldsQuan;
-            fieldsQuan = tempParam.replaceAll("~~~", "");
-            tempParam = where;
-            where = tempParam.replaceAll("~~~", "");
-            tempParam = order;
-            order = tempParam.replaceAll("~~~", "");
-            tempParam = group;
-            group = tempParam.replaceAll("~~~", "");
-            tempParam = fieldNames;
-            fieldNames = tempParam.replaceAll("~~~", "");
+        String tempParam = table;
+        table = tempParam.replaceAll("~~~", "");
+        tempParam = fieldsQuan;
+        fieldsQuan = tempParam.replaceAll("~~~", "");
+        tempParam = where;
+        where = tempParam.replaceAll("~~~", "");
+        tempParam = order;
+        order = tempParam.replaceAll("~~~", "");
+        tempParam = group;
+        group = tempParam.replaceAll("~~~", "");
+        tempParam = fieldNames;
+        fieldNames = tempParam.replaceAll("~~~", "");
 
 
         Session session;
@@ -117,10 +117,42 @@ public class Controller {
         return Response.status(200).build();
     }
 
-    public String deleteSpaces(String param) {
-        if (param.equals(" ")) {
-            param = "";
-        }
-        return param;
+    // метод удаления сессии при выходе из приложения на устройстве
+    @DELETE
+    @Path("{systemAddress: .*}/{login}/{password}/{id}")
+    @Produces("applications/json")
+    public Response delete(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
+                           @PathParam("password") String password, @PathParam("id") String id) {
+        String key = systemAddress + login + password + "~" + id;
+        server.kill(server.getSessionList(), key);
+        return Response.status(200).build();
+    }
+
+    // метод удаления dataSet из памяти при нажатии return на просмотре таблиц на устройстве
+    @DELETE
+    @Path("{systemAddress: .*}/{login}/{password}/{id}/{table}/{fieldsQuan}/{language}/{where}/{order}/{group}/{fieldNames}")
+    @Produces("applications/json")
+    public Response delete(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
+                           @PathParam("password") String password, @PathParam("id") String id,
+                           @PathParam("table") String table, @PathParam("fieldsQuan") String fieldsQuan,
+                           @PathParam("language") String language, @PathParam("where") String where,
+                           @PathParam("order") String order, @PathParam("group") String group,
+                           @PathParam("fieldNames") String fieldNames) {
+        String tempParam = table;
+        table = tempParam.replaceAll("~~~", "");
+        tempParam = fieldsQuan;
+        fieldsQuan = tempParam.replaceAll("~~~", "");
+        tempParam = where;
+        where = tempParam.replaceAll("~~~", "");
+        tempParam = order;
+        order = tempParam.replaceAll("~~~", "");
+        tempParam = group;
+        group = tempParam.replaceAll("~~~", "");
+        tempParam = fieldNames;
+        fieldNames = tempParam.replaceAll("~~~", "");
+        String keyServer = systemAddress + login + password + "~" + id;
+        String keySession = table + fieldsQuan + language + where + order + group + fieldNames + "~" + id;
+        server.getSessionList().get(keyServer).kill(server.getSessionList().get(keyServer).getDataList(), keySession);
+        return Response.status(200).build();
     }
 }
