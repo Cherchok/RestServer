@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Path("/wmap")
 public class Controller {
     private final static AtomicInteger ID = new AtomicInteger(0);
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final static Map<Integer, DataSet> RESP = new ConcurrentHashMap<>();
     private static Server server;
 
@@ -30,7 +31,7 @@ public class Controller {
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get() {
         SystemsCollector systemsCollector = new SystemsCollector();
-        return systemsCollector.getModules();
+        return systemsCollector.getSystems();
     }
 
     // метод для запуска сервера и авторизации
@@ -72,7 +73,10 @@ public class Controller {
         fieldNames = tempParam.replaceAll("~~~", "");
         Session session;
         if (!server.getSessionList().containsKey(systemAddress + login + password + "~" + id)) {
-            int ids = server.idSetter(Integer.parseInt(id));
+            int ids;
+            if (isSameUser(systemAddress + login + password)) {
+                ids = server.idSetter(Integer.parseInt(id));
+            } else ids = 0;
             session = new Session(systemAddress, login, password, ids);
             id = String.valueOf(ids);
         } else {
@@ -147,5 +151,15 @@ public class Controller {
         String keySession = table + fieldsQuan + language + where + order + group + fieldNames + "~" + id;
         server.getSessionList().get(keyServer).kill(server.getSessionList().get(keyServer).getDataList(), keySession);
         return Response.status(200).build();
+    }
+
+    // проверка на пользователя
+    private boolean isSameUser(String userKey) {
+        for (String key : server.getSessionList().keySet()) {
+            if (key.contains(userKey)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

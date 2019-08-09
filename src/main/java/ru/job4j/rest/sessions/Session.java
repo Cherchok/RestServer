@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unused")
 public class Session implements LifeCycle {
     //список данных полученных от SAP
     private LinkedHashMap<String, DataSet[]> dataList = new LinkedHashMap<>();
@@ -23,6 +24,7 @@ public class Session implements LifeCycle {
     private long lifeTime;
 
     // конструктор поумолчанию
+
     public Session() {
         setTimeActivityToSeconds();
     }

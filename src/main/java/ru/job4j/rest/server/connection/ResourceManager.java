@@ -2,6 +2,8 @@ package ru.job4j.rest.server.connection;
 
 import java.util.ResourceBundle;
 
+@SuppressWarnings("unused")
+// класс для получения данных из .properties
 public class ResourceManager {
 
     private final static ResourceManager instance = new ResourceManager();

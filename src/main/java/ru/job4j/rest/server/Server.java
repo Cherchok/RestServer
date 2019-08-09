@@ -15,6 +15,7 @@ public class Server {
     // текущее время
     private long currTime;
 
+    // конструктор
     public Server() {
         setCurrTime();
         sessionLifeCheck();
@@ -66,7 +67,6 @@ public class Server {
     }
 
     // удаление данных из списка
-
     public void kill(Map<String, ?> object, String name) {
         object.remove(name);
         System.gc();
@@ -89,7 +89,6 @@ public class Server {
             @Override
             public void run() {
                 currTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-
             }
         }, 1000, 1000);
     }
@@ -100,11 +99,11 @@ public class Server {
             for (String key : sessionList.keySet()) {
                 long sessionActivityTime = currTime - sessionList.get(key).getLifeTime();
                 System.out.println(key + ": ->" + sessionActivityTime + " sec");
-                System.out.println("list size = " + sessionList.size());
                 if (sessionActivityTime > 60 * 2) {
                     kill(sessionList, key);
                 }
             }
+            System.out.println("list size = " + sessionList.size());
         }
     }
 }

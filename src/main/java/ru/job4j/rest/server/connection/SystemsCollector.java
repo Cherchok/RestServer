@@ -11,7 +11,8 @@ public class SystemsCollector {
     public SystemsCollector() {
     }
 
-    public DataSet[] getModules() {
+    //метод обработки файла .properties в котором собирает адреса доступных систем SAP
+    public DataSet[] getSystems() {
         StringBuilder addressBuilder = new StringBuilder();
         String address;
         String name = "";
