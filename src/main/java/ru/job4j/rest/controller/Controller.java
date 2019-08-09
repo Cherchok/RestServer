@@ -34,22 +34,16 @@ public class Controller {
 
     // метод для запуска сервера и авторизации
     @GET
-    @Path("{systemAddress: .*}/{login}/{password}")
+    @Path("{systemAddress: .*}/{login}/{password}/{language}")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password) {
+                         @PathParam("password") String password, @PathParam("language") String language) {
         Session session;
         int id = 0;
-        if (!server.getSessionList().containsKey(systemAddress + login + password)) {
-            id = server.idSetter(id);
-            session = new Session(systemAddress, login, password, id);
-        } else {
-            session = server.getSessionList().get(systemAddress + login + password);
-        }
-        session.setDataSet(" ", " ", " ", " ", " ", " ", " ");
-        server.setSession(systemAddress, login, password, id, session);
-        return server.getSessionList().get(systemAddress + login + password + "~" + id).getDataSet(" ", " ",
-                " ", " ", " ", " ", " ");
+        id = server.idSetter(id);
+        session = new Session(systemAddress, login, password, id);
+        session.setDataSet(" ", " ", language, " ", " ", " ", " ");
+        return session.getDataSet(" ", " ", language, " ", " ", " ", " ");
     }
 
     // методы к которым обращается клиент через get запросы с параметрами
@@ -78,12 +72,13 @@ public class Controller {
 
 
         Session session;
-        if (!server.getSessionList().containsKey(systemAddress + login + password + id)) {
+
+        if (!server.getSessionList().containsKey(systemAddress + login + password + "~" + id)) {
             int ids = server.idSetter(Integer.parseInt(id));
             session = new Session(systemAddress, login, password, ids);
             id = String.valueOf(ids);
         } else {
-            session = server.getSessionList().get(systemAddress + login + password + id);
+            session = server.getSessionList().get(systemAddress + login + password + "~" + id);
         }
         session.setDataSet(table, fieldsQuan, language, where, order, group, fieldNames);
         server.setSession(systemAddress, login, password, Integer.parseInt(id), session);

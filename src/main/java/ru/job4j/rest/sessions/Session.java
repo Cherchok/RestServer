@@ -6,40 +6,59 @@ import ru.job4j.rest.sapData.SapMap;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 public class Session implements LifeCycle {
+    //список данных полученных от SAP
     private LinkedHashMap<String, DataSet[]> dataList = new LinkedHashMap<>();
+    // логин пользователя
     private String login;
+    // пароль пользователя
     private String password;
+    // адресс системы SAP
     private String systemAddress;
+    // id клиента
     private int id;
+    // время создания сессии или обращения в ней
+    private long lifeTime;
 
+    // конструктор поумолчанию
     public Session() {
+        setTimeActivityToSeconds();
     }
 
+    // конструктор с параметрами
     public Session(String systemAddress, String login, String password, int id) {
+        setTimeActivityToSeconds();
         this.login = login;
         this.password = password;
         this.systemAddress = systemAddress;
         this.id = id;
     }
 
+    // получение списка данных SAP
     public LinkedHashMap<String, DataSet[]> getDataList() {
+        setTimeActivityToSeconds();
         return dataList;
     }
 
+    // объявление нового списка данных SAP
     public void setDataList(LinkedHashMap<String, DataSet[]> dataList) {
+        setTimeActivityToSeconds();
         this.dataList = dataList;
     }
 
+    // получение данных SAP из списка
     public DataSet[] getDataSet(String table, String fieldsQuan, String language, String where, String order,
                                 String group, String fieldNames) {
-
+        setTimeActivityToSeconds();
         return dataList.get(table + fieldsQuan + language + where + order + group + fieldNames + "~" + id);
     }
 
+    // занесение новых данных SAP в список
     public void setDataSet(String table, String fieldsQuan, String language, String where, String order,
                            String group, String fieldNames) {
+        setTimeActivityToSeconds();
         LinkedHashMap<String, LinkedList<String>> lm;
         LinkedList<String> columnLeng;
         LinkedList<String> fieldName;
@@ -103,4 +122,16 @@ public class Session implements LifeCycle {
         object.remove(name);
         System.gc();
     }
+
+    // получение времени последней активности сессии
+    public long getLifeTime() {
+        return lifeTime;
+    }
+
+    // установка времени последней активноси сессии
+    private void setTimeActivityToSeconds() {
+        long milliseconds = System.currentTimeMillis();
+        lifeTime = TimeUnit.MILLISECONDS.toSeconds(milliseconds);
+    }
+
 }

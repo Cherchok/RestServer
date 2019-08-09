@@ -4,31 +4,36 @@ import ru.job4j.rest.life.LifeCycle;
 import ru.job4j.rest.sessions.Session;
 
 import java.util.LinkedHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("unused")
 public class Server implements LifeCycle {
+    // список сессий
     private LinkedHashMap<String, Session> sessionList = new LinkedHashMap<>();
-    private final static AtomicInteger ID = new AtomicInteger(0);
 
     public Server() {
     }
 
+    // получение списка сессий
     public LinkedHashMap<String, Session> getSessionList() {
         return sessionList;
     }
 
+    // объявление саиска сессий
     public void setSessionList(LinkedHashMap<String, Session> sessionList) {
         this.sessionList = sessionList;
     }
 
+    // получение сессии из списка
     public Session getSession(String systemAddress, String login, String password, int id) {
         return sessionList.get(systemAddress + login + password + id);
     }
 
+    // занесение списка в сессию
     public void setSession(String systemAddress, String login, String password, int id, Session session) {
         sessionList.put(systemAddress + login + password + "~" + id, session);
     }
 
+    // присвоение номера клиенту
     public int idSetter(int id) {
         int freeNum = 0;
         for (String key : sessionList.keySet()) {
@@ -52,11 +57,10 @@ public class Server implements LifeCycle {
         return id;
     }
 
-
+    // завершение сессии
     @Override
     public void kill(LinkedHashMap<String, ?> object, String name) {
         object.remove(name);
-
         System.gc();
     }
 }
