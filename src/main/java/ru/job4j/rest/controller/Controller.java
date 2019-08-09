@@ -21,6 +21,7 @@ public class Controller {
 
     static {
         server = new Server();
+
     }
 
     // метод, который при запуске клиентского приложения, определяет доступные системы и их адреса
@@ -69,10 +70,7 @@ public class Controller {
         group = tempParam.replaceAll("~~~", "");
         tempParam = fieldNames;
         fieldNames = tempParam.replaceAll("~~~", "");
-
-
         Session session;
-
         if (!server.getSessionList().containsKey(systemAddress + login + password + "~" + id)) {
             int ids = server.idSetter(Integer.parseInt(id));
             session = new Session(systemAddress, login, password, ids);

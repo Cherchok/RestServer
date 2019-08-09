@@ -117,6 +117,7 @@ public class Session implements LifeCycle {
         }
     }
 
+    // удаление данных SAP из списка
     @Override
     public void kill(LinkedHashMap<String, ?> object, String name) {
         object.remove(name);

@@ -1,20 +1,28 @@
 package ru.job4j.rest.server;
 
-import ru.job4j.rest.life.LifeCycle;
 import ru.job4j.rest.sessions.Session;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
-public class Server implements LifeCycle {
+public class Server {
     // список сессий
-    private LinkedHashMap<String, Session> sessionList = new LinkedHashMap<>();
+    private Map<String, Session> sessionList = new ConcurrentHashMap<>();
+    // текущее время
+    private long currTime;
 
     public Server() {
+        setCurrTime();
+        sessionLifeCheck();
     }
 
+
     // получение списка сессий
-    public LinkedHashMap<String, Session> getSessionList() {
+    public Map<String, Session> getSessionList() {
         return sessionList;
     }
 
@@ -57,10 +65,46 @@ public class Server implements LifeCycle {
         return id;
     }
 
-    // завершение сессии
-    @Override
-    public void kill(LinkedHashMap<String, ?> object, String name) {
+    // удаление данных из списка
+
+    public void kill(Map<String, ?> object, String name) {
         object.remove(name);
         System.gc();
+    }
+
+    // проверка сессий на активность
+    private void sessionLifeCheck() {
+        new java.util.Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Executed...");
+                killSession();
+            }
+        }, 1000 * 30, 1000 * 30);
+    }
+
+    // текущее время обновлястя каждую секунду
+    private void setCurrTime() {
+        new java.util.Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                currTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+
+            }
+        }, 1000, 1000);
+    }
+
+    // удаление сессии
+    private void killSession() {
+        if (sessionList != null) {
+            for (String key : sessionList.keySet()) {
+                long sessionActivityTime = currTime - sessionList.get(key).getLifeTime();
+                System.out.println(key + ": ->" + sessionActivityTime + " sec");
+                System.out.println("list size = " + sessionList.size());
+                if (sessionActivityTime > 60 * 2) {
+                    kill(sessionList, key);
+                }
+            }
+        }
     }
 }
