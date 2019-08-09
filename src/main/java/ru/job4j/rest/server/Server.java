@@ -77,7 +77,7 @@ public class Server {
         new java.util.Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Executed...");
+                System.out.println("Проверка активности...");
                 killSession();
             }
         }, 1000 * 30, 1000 * 30);
@@ -98,12 +98,12 @@ public class Server {
         if (sessionList != null) {
             for (String key : sessionList.keySet()) {
                 long sessionActivityTime = currTime - sessionList.get(key).getLifeTime();
-                System.out.println(key + ": ->" + sessionActivityTime + " sec");
+                System.out.println(key + ": -> " + sessionActivityTime + " sec");
                 if (sessionActivityTime > 60 * 2) {
                     kill(sessionList, key);
                 }
             }
-            System.out.println("list size = " + sessionList.size());
+            System.out.println("Колличество Сессий на сервере = " + sessionList.size());
         }
     }
 }

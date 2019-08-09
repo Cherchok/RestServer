@@ -11,7 +11,7 @@ import java.io.StringReader;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-
+@SuppressWarnings("unused")
 public class SapMap {
     private LinkedList<String> columnLeng = new LinkedList<>();
     private LinkedList<String> fieldName = new LinkedList<>();
@@ -29,7 +29,7 @@ public class SapMap {
     private String group;
     private String fieldNames;
 
-    // constructor by default
+    // конструктор поумолчанию
     public SapMap() {
     }
 
@@ -66,6 +66,7 @@ public class SapMap {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        assert xmlDoc != null;
         NodeList nodeList = xmlDoc.getElementsByTagName("*");
         StringBuilder zdata;
         String zdataTemp;

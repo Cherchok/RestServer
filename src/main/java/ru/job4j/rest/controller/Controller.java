@@ -34,7 +34,7 @@ public class Controller {
         return systemsCollector.getSystems();
     }
 
-    // метод для запуска сервера и авторизации
+    // метод для авторизации
     @GET
     @Path("{systemAddress: .*}/{login}/{password}/{language}")
     @Produces("applications/json;charset=utf-8")

@@ -7,6 +7,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
+@SuppressWarnings("unused")
 public class XMLresponse {
     private String systemAddress;
     private String login;
@@ -24,8 +25,8 @@ public class XMLresponse {
     public XMLresponse() {
     }
 
-    public XMLresponse(String table, String fieldsQuan, String language, String where,
-                       String order, String group, String fieldNames) {
+    XMLresponse(String table, String fieldsQuan, String language, String where,
+                String order, String group, String fieldNames) {
         this.table = table;
         this.fieldsQuan = fieldsQuan;
         this.language = language;

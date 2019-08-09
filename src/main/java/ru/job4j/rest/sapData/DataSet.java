@@ -12,18 +12,20 @@ public class DataSet {
     @SerializedName("values")
     private LinkedList<String> values;
 
-    public DataSet(){}
+    public DataSet() {
+    }
 
-    public DataSet(String name, LinkedList<String> values){
+    public DataSet(String name, LinkedList<String> values) {
         this.name = name;
         this.values = values;
     }
 
     @Override
     public String toString() {
-        return name +": " + values;
+        return name + ": " + values;
     }
 
+    @SuppressWarnings("unused")
     public String getName() {
         return name;
     }
@@ -32,6 +34,7 @@ public class DataSet {
         this.name = name;
     }
 
+    @SuppressWarnings("unused")
     public LinkedList<String> getValues() {
         return values;
     }

@@ -4,6 +4,6 @@ import java.util.LinkedHashMap;
 
 public interface LifeCycle {
 
-    public void kill(LinkedHashMap<String, ?> object, String name);
+    void kill(LinkedHashMap<String, ?> object, String name);
 
 }
