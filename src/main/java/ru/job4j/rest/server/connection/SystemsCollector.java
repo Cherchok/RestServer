@@ -7,21 +7,22 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class SystemsCollector {
+    private StringBuilder addressBuilder = new StringBuilder();
+    private String name = "";
+    private LinkedList<String> addressList = new LinkedList<>();
+    private LinkedHashMap<String, LinkedList<String>> systAddresses = new LinkedHashMap<>();
+    private LinkedList<String> setupKeyList = new LinkedList<>();
+    private ResourceManager resourceManager = new ResourceManager();
+    private int id;
 
+    // конструктор поумолчанию
     public SystemsCollector() {
     }
 
-    //метод обработки файла .properties в котором собирает адреса доступных систем SAP
-    public DataSet[] getSystems() {
-        StringBuilder addressBuilder = new StringBuilder();
-        String address;
-        String name = "";
-        LinkedList<String> addressList = new LinkedList<>();
-        LinkedHashMap<String, LinkedList<String>> systAddresses = new LinkedHashMap<>();
-        LinkedList<String> setupKeyList = new LinkedList<>();
-        ResourceManager resourceManager = new ResourceManager();
-        int id = 1;
-
+    // составляем список ключей доступных систем
+    private void setSetupKeyList() {
+        // все списки систем начинаются с 1 , с 0 начинаются другие параметры
+        id = 1;
         for (int i = 0; i < resourceManager.getRb().keySet().size(); i++) {
             for (String key : resourceManager.getRb().keySet()) {
                 int num = Integer.parseInt(String.valueOf(key.charAt(0)));
@@ -31,12 +32,18 @@ public class SystemsCollector {
             }
             id++;
         }
+    }
 
+    // заполняем список систем с ключами
+    private void setSystAddresses() {
+        setSetupKeyList();
         id = 1;
         int lastIter = setupKeyList.size() - 1;
         Collections.sort(setupKeyList);
         for (String key : setupKeyList) {
+
             int num = Integer.parseInt(String.valueOf(key.charAt(0)));
+            String address;
             if (num == id) {
                 if (!key.contains("progName")) {
                     addressBuilder.append(resourceManager.getRb().getString(key));
@@ -69,18 +76,23 @@ public class SystemsCollector {
             }
             lastIter--;
         }
+    }
 
+    // заполняем системы в класс DataSet для передачи Rest клиенту
+    public DataSet[] getSystems() {
+        setSystAddresses();
         DataSet[] modules = new DataSet[systAddresses.size()];
         id = 0;
 
         for (String systName : systAddresses.keySet()) {
+
             DataSet system = new DataSet();
             system.setName(systName);
             system.setValues(systAddresses.get(systName));
             modules[id] = system;
             id++;
-        }
 
+        }
         return modules;
     }
 }

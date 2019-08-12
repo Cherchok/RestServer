@@ -14,9 +14,12 @@ public class Server {
     private Map<String, Session> sessionList = new ConcurrentHashMap<>();
     // текущее время
     private long currTime;
+    // время жизни сессии
+    private int lifeTime;
 
     // конструктор
     public Server() {
+        lifeTime = 30;
         setCurrTime();
         sessionLifeCheck();
     }
@@ -80,7 +83,7 @@ public class Server {
                 System.out.println("Проверка активности...");
                 killSession();
             }
-        }, 1000 * 30, 1000 * 30);
+        }, 1000 * 60 * lifeTime / 2, 11000 * 60 * lifeTime / 2);
     }
 
     // текущее время обновлястя каждую секунду
@@ -99,7 +102,7 @@ public class Server {
             for (String key : sessionList.keySet()) {
                 long sessionActivityTime = currTime - sessionList.get(key).getLifeTime();
                 System.out.println(key + ": -> " + sessionActivityTime + " sec");
-                if (sessionActivityTime > 60 * 2) {
+                if (sessionActivityTime > 60 * lifeTime) {
                     kill(sessionList, key);
                 }
             }
