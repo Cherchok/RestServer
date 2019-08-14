@@ -1,5 +1,6 @@
 package ru.job4j.rest.server.connection;
 
+import ru.job4j.rest.properties.Setup;
 import ru.job4j.rest.sapData.DataSet;
 
 import java.util.Collections;
@@ -12,20 +13,31 @@ public class SystemsCollector {
     private LinkedList<String> addressList = new LinkedList<>();
     private LinkedHashMap<String, LinkedList<String>> systAddresses = new LinkedHashMap<>();
     private LinkedList<String> setupKeyList = new LinkedList<>();
-    private ResourceManager resourceManager = new ResourceManager();
     private int id;
+    private Setup setup = new Setup();
 
     // конструктор поумолчанию
     public SystemsCollector() {
+    }
+
+    // номер позиции в setup
+    private int getNumber(String key) {
+        int number = 0;
+        for (int i = 0; i < key.length(); i++) {
+            if (key.charAt(i) == '.') {
+                number = Integer.parseInt(String.valueOf(key.substring(0, i)));
+            }
+        }
+        return number;
     }
 
     // составляем список ключей доступных систем
     private void setSetupKeyList() {
         // все списки систем начинаются с 1 , с 0 начинаются другие параметры
         id = 1;
-        for (int i = 0; i < resourceManager.getRb().keySet().size(); i++) {
-            for (String key : resourceManager.getRb().keySet()) {
-                int num = Integer.parseInt(String.valueOf(key.charAt(0)));
+        for (int i = 0; i < setup.getPropertiesNames().size(); i++) {
+            for (String key : setup.getPropertiesNames()) {
+                int num = getNumber(key);
                 if (num == id) {
                     setupKeyList.add(key);
                 }
@@ -46,14 +58,14 @@ public class SystemsCollector {
             String address;
             if (num == id) {
                 if (!key.contains("progName")) {
-                    addressBuilder.append(resourceManager.getRb().getString(key));
+                    addressBuilder.append(setup.getProperty(key));
                     if (lastIter == 0) {
                         address = addressBuilder.toString();
                         addressList.add(address);
                         systAddresses.put(name, addressList);
                     }
                 } else {
-                    name = resourceManager.getValue(key);
+                    name = setup.getProperty(key);
                     if (lastIter == 0) {
                         address = addressBuilder.toString();
                         addressList.add(address);
@@ -69,9 +81,9 @@ public class SystemsCollector {
                 addressList = new LinkedList<>();
                 id++;
                 if (!key.contains("progName")) {
-                    addressBuilder.append(resourceManager.getRb().getString(key));
+                    addressBuilder.append(setup.getProperty(key));
                 } else {
-                    name = resourceManager.getValue(key);
+                    name = setup.getProperty(key);
                 }
             }
             lastIter--;

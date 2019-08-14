@@ -1,5 +1,7 @@
 package ru.job4j.rest.server;
 
+import ru.job4j.rest.properties.IDoperator;
+import ru.job4j.rest.properties.Setup;
 import ru.job4j.rest.sessions.Session;
 
 import java.util.LinkedHashMap;
@@ -19,11 +21,28 @@ public class Server {
 
     // конструктор
     public Server() {
-        lifeTime = 30;
+
+        Setup setup = new Setup();
+//        setup.clearProperties();
+//        setup.setSAPsystem("BL0", "http://support.alpeconsulting.com:",
+//                "8201", "/sap/bc/srt/rfc/sap/");
+//        setup.setSAPsystem("HANA", "https://support.alpeconsulting.com:",
+//                "8311", "/sap/bc/srt/rfc/sap/");
+////        setup.setProperty("Hello", "World");
+//        setup.setProperty("lifeTime", "1");
+//        setup.setProperty("stamok", "qwdfqewfd");
+//        setup.removeProperty("stamok");
+//        setup.removeProperty("Hello");
+//        setup.removeSystem("BL0");
+//        setup.removeProperty("");
+        for (String name : setup.getPropertiesNames()) {
+            System.out.println(name + ": " + setup.getProperties().get(name));
+        }
+
+        lifeTime = Integer.parseInt(setup.getProperty("0.lifeTime"));
         setCurrTime();
         sessionLifeCheck();
     }
-
 
     // получение списка сессий
     public Map<String, Session> getSessionList() {
@@ -47,26 +66,8 @@ public class Server {
 
     // присвоение номера клиенту
     public int idSetter(int id) {
-        int freeNum = 0;
-        for (String key : sessionList.keySet()) {
-            for (int i = 0; i < key.length(); i++) {
-                int idTemp = 0;
-                if (key.charAt(i) == '~') {
-                    idTemp = Integer.parseInt(key.substring(i + 1));
-                    if (freeNum != 0 || idTemp > i) {
-                        freeNum = i;
-                    }
-                }
-                if (id <= idTemp) {
-                    if (freeNum != 0) {
-                        id = freeNum;
-
-                    } else id = idTemp + 1;
-
-                }
-            }
-        }
-        return id;
+        IDoperator idOperator = new IDoperator();
+        return idOperator.getNumberFromString(id, sessionList.keySet());
     }
 
     // удаление данных из списка
@@ -83,7 +84,7 @@ public class Server {
                 System.out.println("Проверка активности...");
                 killSession();
             }
-        }, 1000 * 60 * lifeTime / 2, 11000 * 60 * lifeTime / 2);
+        }, 1000 * 60 * lifeTime / 2, 1000 * 60 * lifeTime / 2);
     }
 
     // текущее время обновлястя каждую секунду
