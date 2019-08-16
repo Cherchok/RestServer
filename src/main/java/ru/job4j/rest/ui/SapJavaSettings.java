@@ -8,23 +8,27 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class StartServer extends JFrame {
-    private JButton settingsBtn = new JButton("settings");
-    private JButton startBtn = new JButton("start");
-    private JButton exitBtn = new JButton("exit");
+// класс настройки параметров приложения
+public class SapJavaSettings extends JFrame {
+    private JButton settingsBtn = new JButton("Параметры");
+    private JButton startBtn = new JButton("запуск");
+    private JButton exitBtn = new JButton("выход");
     private Server server;
     private Setup setup;
 
-    public StartServer(Server server, Setup setup) {
-        super("Server");
+    // конструктор
+    public SapJavaSettings(Server server, Setup setup) {
+        super("Сервер");
+        setSize(250,100);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.server = server;
         this.setup = setup;
-        this.setBounds(100, 100, 250, 100);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         buttonsActions();
         fillFrame();
     }
 
+    // наполнение интрефейса
     private void fillFrame() {
         Container container = this.getContentPane();
         container.setLayout(new GridLayout(1, 3, 2, 2));
@@ -33,12 +37,14 @@ public class StartServer extends JFrame {
         container.add(exitBtn);
     }
 
+    // активация событий при нажитии на конпки
     private void buttonsActions() {
         actSettingsBtn();
         actStartBtn();
         actExitBtn();
     }
 
+    // событие для кнопки параметры
     private void actSettingsBtn() {
         settingsBtn.addActionListener(new ActionListener() {
             @Override
@@ -50,6 +56,7 @@ public class StartServer extends JFrame {
         });
     }
 
+    // событие для кнопки запуска
     private void actStartBtn() {
         startBtn.addActionListener(new ActionListener() {
             @Override
@@ -60,11 +67,16 @@ public class StartServer extends JFrame {
         });
     }
 
+    // событие для кнопки выхода
     private void actExitBtn() {
         exitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
+
+                if (JOptionPane.showConfirmDialog(SapJavaSettings.this,
+                        "Хотите завершить работу сервера ?", "Сервер",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                    System.exit(0);
             }
         });
     }

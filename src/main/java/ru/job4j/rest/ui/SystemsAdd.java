@@ -8,33 +8,34 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// класс настройки SAP систем
 class SystemsAdd extends JFrame {
-    private JButton loadBtn = new JButton("load");
-    private JButton deleteBtn = new JButton("delete");
-    private JButton closeBtn = new JButton("back");
+    private JButton loadBtn = new JButton("добавить");
+    private JButton deleteBtn = new JButton("удалить");
+    private JButton closeBtn = new JButton("назад");
     private JTextField progNameText = new JTextField("", 10);
     private JTextField ipText = new JTextField("", 10);
     private JTextField portText = new JTextField("", 10);
     private JTextField uriText = new JTextField("", 10);
-    private JLabel progLable = new JLabel("name:");
+    private JLabel progLable = new JLabel("имя системы:");
     private JLabel ipLable = new JLabel("ip:");
     private JLabel portLable = new JLabel("port:");
     private JLabel uriLable = new JLabel("uri:");
     private Setup setup;
     private Server server;
 
-
+    // конструктор
     SystemsAdd(Server server, Setup setup) {
-        super("SAP Systems");
+        super("Настройка систем SAP");
+        setSize(200, 150);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.server = server;
         this.setup = setup;
-        this.setBounds(100, 100, 200, 150);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         buttonsActions();
         fillFrame();
 
     }
-
 
     // заполнение окна атрибутами
     private void fillFrame() {
@@ -66,31 +67,74 @@ class SystemsAdd extends JFrame {
         container.add(closeBtn);
     }
 
-    //
+    // активация событий при нажитии на конпки
     private void buttonsActions() {
         actLoadBtn();
         actDeleteBtn();
         actCloseButton();
     }
 
+    // событие для кнопки добавления
     private void actLoadBtn() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setup.setSAPsystem(progNameText.getText(), ipText.getText(), portText.getText(), uriText.getText());
+                if (!isExist(progNameText.getText())) {
+                    if (!progNameText.getText().equals("") && !ipText.getText().equals("") &&
+                            !portText.getText().equals("") && !uriText.getText().equals("")) {
+                        setup.setSAPsystem(progNameText.getText(), ipText.getText(), portText.getText(), uriText.getText());
+                        String message = "Система " + progNameText.getText() + " добавлена";
+                        JOptionPane.showMessageDialog(null, message, "Настройка систем SAP",
+                                JOptionPane.PLAIN_MESSAGE);
+                    } else {
+                        String message = "Не все параметры указаны";
+                        JOptionPane.showMessageDialog(null, message, "Настройка систем SAP",
+                                JOptionPane.PLAIN_MESSAGE);
+                    }
+                } else {
+                    if (JOptionPane.showConfirmDialog(SystemsAdd.this,
+                            "Хотите перезаписать систему " + progNameText.getText() + " ?", "Настройка систем SAP",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        if (!progNameText.getText().equals("") && !ipText.getText().equals("") &&
+                                !portText.getText().equals("") && !uriText.getText().equals("")) {
+                            setup.removeSystem(progNameText.getText());
+                            setup.setSAPsystem(progNameText.getText(), ipText.getText(), portText.getText(), uriText.getText());
+                            String message = "Система " + progNameText.getText() + " перезаписана";
+                            JOptionPane.showMessageDialog(null, message, "Настройка систем SAP",
+                                    JOptionPane.PLAIN_MESSAGE);
+                        } else {
+                            String message = "Не все параметры указаны";
+                            JOptionPane.showMessageDialog(null, message, "Настройка систем SAP",
+                                    JOptionPane.PLAIN_MESSAGE);
+                        }
+
+                    }
+                }
             }
         });
     }
 
+    // событие для кнопки удаления
     private void actDeleteBtn() {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setup.removeSystem(progNameText.getText());
+                if (isExist(progNameText.getText())) {
+                    if (JOptionPane.showConfirmDialog(SystemsAdd.this,
+                            "Хотите удалить систему " + progNameText.getText() + " ?", "Настройка систем SAP",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        setup.removeSystem(progNameText.getText());
+                    }
+                } else {
+                    String message = "Системы с именем " + progNameText.getText() + " нет";
+                    JOptionPane.showMessageDialog(null, message, "Настройка систем SAP",
+                            JOptionPane.PLAIN_MESSAGE);
+                }
             }
         });
     }
 
+    // событие для кнопки возврата
     private void actCloseButton() {
         closeBtn.addActionListener(new ActionListener() {
             @Override
@@ -100,6 +144,16 @@ class SystemsAdd extends JFrame {
                 dispose();
             }
         });
+    }
+
+    // проверка на наличие системы в списке
+    private boolean isExist(String enteredName) {
+        for (String name : setup.getPropertiesNames()) {
+            if (setup.getProperties().get(name).equals(enteredName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

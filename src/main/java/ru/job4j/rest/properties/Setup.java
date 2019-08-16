@@ -1,6 +1,5 @@
 package ru.job4j.rest.properties;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -195,29 +194,15 @@ public class Setup {
     // добавление новой системы SAP в свойства
     public void setSAPsystem(String progName, String ip, String port, String uri) {
         int number = getNextSystemNumber(1);
-        boolean isExist = false;
         try {
             propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (Object name : propertiesHolder.getProperties().keySet()) {
-            if (propertiesHolder.getProperties().getProperty(name.toString()).equals(progName)) {
-                isExist = true;
-            }
-        }
-        if (!isExist) {
             propertiesHolder.getProperties().put(number + ".progName", progName);
             propertiesHolder.getProperties().put(number + ".ip", ip);
             propertiesHolder.getProperties().put(number + ".port", port);
             propertiesHolder.getProperties().put(number + ".uri", uri);
-        } else {
-            String message = "Система с именем " + progName + " уже существует";
-//            String message = "System " + progName + " already exist!!!";
-            JOptionPane.showMessageDialog(null, message, "Settings List",
-                    JOptionPane.PLAIN_MESSAGE);
-        }
-
 
         try {
             propertiesHolder.commit();

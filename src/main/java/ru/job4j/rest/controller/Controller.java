@@ -5,7 +5,7 @@ import ru.job4j.rest.sapData.DataSet;
 import ru.job4j.rest.server.Server;
 import ru.job4j.rest.server.connection.SystemsCollector;
 import ru.job4j.rest.sessions.Session;
-import ru.job4j.rest.ui.StartServer;
+import ru.job4j.rest.ui.SapJavaSettings;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -21,9 +21,10 @@ public class Controller {
     private final static Map<Integer, DataSet> RESP = new ConcurrentHashMap<>();
     private static Server server;
 
+
     static {
         server = new Server();
-        StartServer starter = new StartServer(server, server.getSetup());
+        SapJavaSettings starter = new SapJavaSettings(server, server.getSetup());
         starter.setVisible(true);
     }
 

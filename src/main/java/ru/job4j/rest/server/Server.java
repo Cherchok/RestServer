@@ -99,10 +99,12 @@ public class Server {
         }
     }
 
+    // список нстроек
     public Setup getSetup() {
         return setup;
     }
 
+    // время бездействия сессии, по истечении которго удалется из списка
     public void setLifeTime() {
         this.lifeTime = Integer.parseInt(setup.getProperty("0.lifeTime"));
         sessionLifeCheck();
