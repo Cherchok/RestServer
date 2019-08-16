@@ -18,30 +18,16 @@ public class Server {
     private long currTime;
     // время жизни сессии
     private int lifeTime;
+    // настрройки  сервера
+    private Setup setup = new Setup();
 
     // конструктор
     public Server() {
-
-        Setup setup = new Setup();
-//        setup.clearProperties();
-//        setup.setSAPsystem("BL0", "http://support.alpeconsulting.com:",
-//                "8201", "/sap/bc/srt/rfc/sap/");
-//        setup.setSAPsystem("HANA", "https://support.alpeconsulting.com:",
-//                "8311", "/sap/bc/srt/rfc/sap/");
-////        setup.setProperty("Hello", "World");
-//        setup.setProperty("lifeTime", "1");
-//        setup.setProperty("stamok", "qwdfqewfd");
-//        setup.removeProperty("stamok");
-//        setup.removeProperty("Hello");
-//        setup.removeSystem("BL0");
-//        setup.removeProperty("");
         for (String name : setup.getPropertiesNames()) {
             System.out.println(name + ": " + setup.getProperties().get(name));
         }
-
-        lifeTime = Integer.parseInt(setup.getProperty("0.lifeTime"));
+        setLifeTime();
         setCurrTime();
-        sessionLifeCheck();
     }
 
     // получение списка сессий
@@ -82,6 +68,7 @@ public class Server {
             @Override
             public void run() {
                 System.out.println("Проверка активности...");
+                System.out.println("life check: " + lifeTime);
                 killSession();
             }
         }, 1000 * 60 * lifeTime / 2, 1000 * 60 * lifeTime / 2);
@@ -103,11 +90,21 @@ public class Server {
             for (String key : sessionList.keySet()) {
                 long sessionActivityTime = currTime - sessionList.get(key).getLifeTime();
                 System.out.println(key + ": -> " + sessionActivityTime + " sec");
+                System.out.println("lifeTime sessionKill: " + lifeTime);
                 if (sessionActivityTime > 60 * lifeTime) {
                     kill(sessionList, key);
                 }
             }
             System.out.println("Колличество Сессий на сервере = " + sessionList.size());
         }
+    }
+
+    public Setup getSetup() {
+        return setup;
+    }
+
+    public void setLifeTime() {
+        this.lifeTime = Integer.parseInt(setup.getProperty("0.lifeTime"));
+        sessionLifeCheck();
     }
 }

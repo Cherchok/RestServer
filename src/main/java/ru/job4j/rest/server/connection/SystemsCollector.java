@@ -14,10 +14,11 @@ public class SystemsCollector {
     private LinkedHashMap<String, LinkedList<String>> systAddresses = new LinkedHashMap<>();
     private LinkedList<String> setupKeyList = new LinkedList<>();
     private int id;
-    private Setup setup = new Setup();
+    private Setup setup;
 
     // конструктор поумолчанию
-    public SystemsCollector() {
+    public SystemsCollector(Setup setup) {
+        this.setup = setup;
     }
 
     // номер позиции в setup

@@ -5,6 +5,7 @@ import ru.job4j.rest.sapData.DataSet;
 import ru.job4j.rest.server.Server;
 import ru.job4j.rest.server.connection.SystemsCollector;
 import ru.job4j.rest.sessions.Session;
+import ru.job4j.rest.ui.StartServer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -22,7 +23,17 @@ public class Controller {
 
     static {
         server = new Server();
+        StartServer starter = new StartServer(server, server.getSetup());
+        starter.setVisible(true);
+    }
 
+    // запуск сервера
+    @GET
+    @Path("/start")
+    @Produces("applications/json;charset=utf-8")
+    public Response startServer() {
+        server = new Server();
+        return Response.status(200).build();
     }
 
     // метод, который при запуске клиентского приложения, определяет доступные системы и их адреса
@@ -30,7 +41,7 @@ public class Controller {
     @Path("/connection")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get() {
-        SystemsCollector systemsCollector = new SystemsCollector();
+        SystemsCollector systemsCollector = new SystemsCollector(server.getSetup());
         return systemsCollector.getSystems();
     }
 
