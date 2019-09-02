@@ -73,7 +73,7 @@ class SettingsSelector extends JFrame {
         });
     }
 
-    // событие для кнопки
+    // событие для кнопки возврата
     private void actBackBtn() {
         backBtn.addActionListener(new ActionListener() {
             @Override
@@ -85,7 +85,7 @@ class SettingsSelector extends JFrame {
         });
     }
 
-    // событие для кнопки
+    // событие для кнопки визуализации настроек
     private void actShowSettingsBtn() {
         showSettingsBtn.addActionListener(new ActionListener() {
             @Override

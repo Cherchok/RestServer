@@ -68,7 +68,7 @@ public class Server {
             @Override
             public void run() {
                 System.out.println("Проверка активности...");
-                System.out.println("life check: " + lifeTime);
+                System.out.println("life check: " + (lifeTime / 2));
                 killSession();
             }
         }, 1000 * 60 * lifeTime / 2, 1000 * 60 * lifeTime / 2);

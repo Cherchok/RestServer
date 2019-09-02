@@ -10,6 +10,8 @@ import ru.job4j.rest.ui.SapJavaSettings;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,30 +22,61 @@ public class Controller {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final static Map<Integer, DataSet> RESP = new ConcurrentHashMap<>();
     private static Server server;
-
-
-    static {
-        server = new Server();
-        SapJavaSettings starter = new SapJavaSettings(server, server.getSetup());
-        starter.setVisible(true);
-    }
+    private static boolean isInitial;
+    private static Timer startServerTimer = new Timer();
+    private static SapJavaSettings[] starter = {new SapJavaSettings()};
 
     // запуск сервера
     @GET
-    @Path("/start")
-    @Produces("applications/json;charset=utf-8")
-    public Response startServer() {
-        server = new Server();
-        return Response.status(200).build();
+    @Path("")
+    @Produces("application/json;charset=utf-8")
+    public String start() {
+        startServer();
+        return "Server activated";
     }
+
+    // запуск сервера
+    private static void startServer() {
+
+        starter[0].setVisible(true);
+        if (server == null) {
+            startServerTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    server = starter[0].getServer();
+                    if (server != null) {
+                        starter[0] = new SapJavaSettings(server, server.getSetup());
+                        isInitial = true;
+                        startServerTimer.cancel();
+                    }
+                }
+            }, 0, 10);
+        } else {
+            isInitial = true;
+        }
+    }
+
+    // тестовый метод
+    @GET
+    @Path("/test")
+    @Produces("applications/json;charset=utf-8")
+    public String getTest() {
+        return "Hello";
+    }
+
+
 
     // метод, который при запуске клиентского приложения, определяет доступные системы и их адреса
     @GET
     @Path("/connection")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get() {
-        SystemsCollector systemsCollector = new SystemsCollector(server.getSetup());
-        return systemsCollector.getSystems();
+        SystemsCollector systemsCollector;
+        if (isInitial) {
+            systemsCollector = new SystemsCollector(server.getSetup());
+            return systemsCollector.getSystems();
+        }
+        return null;
     }
 
     // метод для авторизации

@@ -16,14 +16,25 @@ public class SapJavaSettings extends JFrame {
     private Server server;
     private Setup setup;
 
-    // конструктор
+    // конструктор для инициализированного сервера
     public SapJavaSettings(Server server, Setup setup) {
         super("Сервер");
-        setSize(250,100);
+        setSize(250, 100);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.server = server;
         this.setup = setup;
+        buttonsActions();
+        fillFrame();
+    }
+
+    // конструктор без инициализации сервера
+    public SapJavaSettings() {
+        super("Сервер");
+        setSize(250, 100);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setup = new Setup();
         buttonsActions();
         fillFrame();
     }
@@ -63,6 +74,19 @@ public class SapJavaSettings extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //TODO
 
+//                Client client = ClientBuilder.newClient();
+//                WebTarget target = client.target("http://192.168.31.162:8080/rest/rest/wmap/start");
+//                System.out.println(target.request(MediaType.APPLICATION_JSON).get(String.class));
+
+                if (server == null) {
+                    setServer();
+                } else {
+                    if (JOptionPane.showConfirmDialog(SapJavaSettings.this,
+                            "Сервер уже запущен, хотите перезапустить?", "Сервер",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        setServer();
+                    }
+                }
             }
         });
     }
@@ -75,10 +99,21 @@ public class SapJavaSettings extends JFrame {
 
                 if (JOptionPane.showConfirmDialog(SapJavaSettings.this,
                         "Хотите завершить работу сервера ?", "Сервер",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     System.exit(0);
+                }
             }
         });
+    }
+
+    // возвращает сервер
+    public Server getServer() {
+        return server;
+    }
+
+    // инициализация сервера
+    private void setServer() {
+        this.server = new Server();
     }
 
 }
