@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="war" build-on-make="true" name="RestTest">
+  <artifact type="exploded-war" build-on-make="true" name="RestTest">
     <output-path>$PROJECT_DIR$/out/artifacts/RestTest</output-path>
-    <root id="archive" name="RestTest.war">
+    <root id="root">
       <element id="javaee-facet-resources" facet="RestTest/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
