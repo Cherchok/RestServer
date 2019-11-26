@@ -19,7 +19,7 @@ public class Setup {
     public void removeProperty(String key) {
         boolean isRemoved = false;
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class Setup {
     // удаление системы SAP
     public void removeSystem(String progName) {
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +80,7 @@ public class Setup {
     public String getProperty(String key) {
         String value = "";
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,9 +105,14 @@ public class Setup {
     public Set<String> getPropertiesNames() {
         Set<String> namesList = new LinkedHashSet<>();
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            try {
+                propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_CREATE);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         try {
             if (propertiesHolder != null) {
@@ -133,7 +138,7 @@ public class Setup {
     public LinkedHashMap<String, String> getProperties() {
         LinkedHashMap<String, String> properties = new LinkedHashMap<>();
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,7 +165,7 @@ public class Setup {
     // добавление свойства
     public void setProperty(String key, String value) {
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -195,7 +200,7 @@ public class Setup {
     public void setSAPsystem(String progName, String ip, String port, String uri) {
         int number = getNextSystemNumber(1);
         try {
-            propertiesHolder = new MyPropertiesHolder("settings.properties", MyPropertiesHolder.MODE_UPDATE);
+            propertiesHolder = new MyPropertiesHolder("C:\\Users\\Public\\java_server\\settings.properties", MyPropertiesHolder.MODE_UPDATE);
         } catch (IOException e) {
             e.printStackTrace();
         }

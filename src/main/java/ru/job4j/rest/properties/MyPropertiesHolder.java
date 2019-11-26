@@ -2,6 +2,7 @@ package ru.job4j.rest.properties;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -35,6 +36,7 @@ class MyPropertiesHolder {
 
     // запись в хранилище свойств
     void commit() throws IOException {
+//        FilePermission permission = new FilePermission(filename,"write");
         FileOutputStream outputStream = new FileOutputStream(filename);
         properties.store(outputStream, "");
         outputStream.close();

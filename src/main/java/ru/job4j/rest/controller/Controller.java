@@ -26,7 +26,7 @@ public class Controller {
     private static Timer startServerTimer = new Timer();
     private static SapJavaSettings[] starter = {new SapJavaSettings()};
 
-    // запуск сервера
+    // запуск сервера через Tomcat
     @GET
     @Path("")
     @Produces("application/json;charset=utf-8")

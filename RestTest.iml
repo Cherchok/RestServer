@@ -24,9 +24,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.2" level="application_server_libraries" />
-    <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.2 - RESTful Web Service" level="application_server_libraries" />
-    <orderEntry type="library" name="jersey-container-servlet" level="application" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-json:1.8" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jettison:jettison:1.1" level="project" />
     <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
@@ -45,5 +42,6 @@
     <orderEntry type="library" name="Maven: javax.ws.rs:jsr311-api:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Tomcat 9.0.24" level="application_server_libraries" />
   </component>
 </module>

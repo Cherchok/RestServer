@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="RestTest:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/RestTest_war_exploded</output-path>
-    <root id="root">
+  <artifact type="war" build-on-make="true" name="RestTest">
+    <output-path>$PROJECT_DIR$/out/artifacts/RestTest</output-path>
+    <root id="archive" name="RestTest.war">
       <element id="javaee-facet-resources" facet="RestTest/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -33,7 +33,6 @@
           <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
         </element>
       </element>
-      <element id="artifact" artifact-name="RestTest:war exploded2" />
     </root>
   </artifact>
 </component>
