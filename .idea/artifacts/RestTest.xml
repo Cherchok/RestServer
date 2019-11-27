@@ -33,6 +33,7 @@
           <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
         </element>
       </element>
+      <element id="directory" name="META-INF" />
     </root>
   </artifact>
 </component>

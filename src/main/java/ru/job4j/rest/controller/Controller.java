@@ -7,7 +7,11 @@ import ru.job4j.rest.server.connection.SystemsCollector;
 import ru.job4j.rest.sessions.Session;
 import ru.job4j.rest.ui.SapJavaSettings;
 
+import javax.servlet.http.HttpServlet;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.Timer;
@@ -17,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Path("/wmap")
-public class Controller {
+public class Controller extends HttpServlet {
     private final static AtomicInteger ID = new AtomicInteger(0);
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final static Map<Integer, DataSet> RESP = new ConcurrentHashMap<>();
@@ -25,6 +29,7 @@ public class Controller {
     private static boolean isInitial;
     private static Timer startServerTimer = new Timer();
     private static SapJavaSettings[] starter = {new SapJavaSettings()};
+    private String userIP;
 
     // запуск сервера через Tomcat
     @GET
@@ -56,16 +61,6 @@ public class Controller {
         }
     }
 
-    // тестовый метод
-    @GET
-    @Path("/test")
-    @Produces("applications/json;charset=utf-8")
-    public String getTest() {
-        return "Hello";
-    }
-
-
-
     // метод, который при запуске клиентского приложения, определяет доступные системы и их адреса
     @GET
     @Path("/connection")
@@ -84,10 +79,13 @@ public class Controller {
     @Path("{systemAddress: .*}/{login}/{password}/{language}")
     @Produces("applications/json;charset=utf-8")
     public DataSet[] get(@PathParam("systemAddress") String systemAddress, @PathParam("login") String login,
-                         @PathParam("password") String password, @PathParam("language") String language) {
+                         @PathParam("password") String password, @PathParam("language") String language,
+                         @Context HttpServletRequest request) {
         Session session;
         int id = 0;
         id = server.idSetter(id);
+        // получаем адресс клиента (на будущее)
+        userIP = request.getRemoteAddr();
         session = new Session(systemAddress, login, password, id);
         session.setDataSet(" ", " ", language, " ", " ", " ", " ");
         return session.getDataSet(" ", " ", language, " ", " ", " ", " ");
